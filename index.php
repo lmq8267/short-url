@@ -170,6 +170,7 @@ if ($link) {
     $now = new DateTime("now", new DateTimeZone('Asia/Shanghai'));
     if ($expiresAt && $now >= $expiresAt) {
         echo "链接已过期";
+        unlink("shortlinks/{$key}.json");
         exit;
     }
 
