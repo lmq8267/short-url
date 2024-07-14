@@ -169,9 +169,24 @@
                     </div>
 
                     <div class="input-group mb-3">
-                        <span class="input-group-text">有效期(分钟)</span>
-                        <input type="number" class="form-control" id="expiration" placeholder="可选，单位：分钟（留空为永久有效，默认5分钟）" value="5">
-                        <div class="text-dangers" style="color: white !important; font-weight: bold; font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;⚠️过期后将会自动删除，并释放后缀，其他人将可使用！👆</div>
+                       <label class="input-group-text" for="expiration">有效期</label>
+                       <select class="form-select" id="expiration" name="expiration" onchange="handleExpirationChange()">
+                       <option value="">永久有效</option>
+                       <option value="1" selected>1分钟</option>
+                       <option value="5">5分钟</option>
+                       <option value="10">10分钟</option>
+                       <option value="30">30分钟</option>
+                       <option value="60">1小时</option>
+                       <option value="600">10小时</option>
+                       <option value="1440">1天</option>
+                       <option value="10080">1周</option>
+                       <option value="43200">1个月</option>
+                       <option value="custom">自定义</option>
+                       </select>
+                       <input type="number" class="form-control" id="expirationCustom" placeholder="请输入分钟数" style="display:none;">
+                    </div>
+                    <div>
+                       <p class="text-dangers" style="color: white !important; font-weight: bold; font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;⚠️过期后将会自动删除，并释放后缀，其他人将可使用！👆</p>
                     </div>
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="burn_after_reading">阅后即焚</label>
@@ -179,7 +194,9 @@
                             <option value="false" selected>不启用</option>
                             <option value="true">启用</option>
                         </select>
-                        <div class="text-dangers" style="color: white !important; font-weight: bold; font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;⚠️启用后打开一次将自动删除，并释放后缀，其他人将可使用！👆</div>
+                    </div>
+                    <div>
+                        <p class="text-dangers" style="color: white !important; font-weight: bold; font-size: 14px;">&nbsp;&nbsp;&nbsp;&nbsp;⚠️启用后打开一次将自动删除，并释放后缀，其他人将可使用！👆</p>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">请输入内容</span>
@@ -218,7 +235,7 @@
                 <div class="stat-value">{{todayvisits}}</div>
             </div>
         </div>
-        <span class="text-muted">站长邮箱: 修改为你的邮箱地址</span>
+        <span class="text-muted">站长邮箱: email@cnqq.cloudns.ch </span>
     </footer>
 </div>
 <script>
@@ -226,9 +243,12 @@
         var userInput = document.getElementById("userInput").value;
         var shortCode = document.getElementById("shortCode").value;
         var password = document.getElementById("password").value;
-        var expiration = document.getElementById("expiration").value;
+        var expirationSelect = document.getElementById("expiration");
+        var expirationCustom = document.getElementById("expirationCustom");
         var burnAfterReading = document.getElementById("burn_after_reading").value;
         var type = document.getElementById("type").value;
+
+        var expiration = expirationSelect.value === "custom" ? expirationCustom.value : expirationSelect.value;
 
         // Show loading overlay
         document.getElementById("loading-overlay").style.display = "block";
@@ -275,6 +295,20 @@
             document.body.style.overflow = "auto"; // Restore scrolling
         });
     });
+
+    function handleExpirationChange() {
+        var expirationSelect = document.getElementById("expiration");
+        var expirationCustom = document.getElementById("expirationCustom");
+
+        if (expirationSelect.value === "custom") {
+            expirationCustom.style.display = "block";
+            expirationCustom.disabled = false;
+        } else {
+            expirationCustom.style.display = "none";
+            expirationCustom.disabled = true;
+            expirationCustom.value = "";
+        }
+    }
 
     function copyShortUrl() {
         var shortUrl = document.getElementById("shortUrl").innerText;
