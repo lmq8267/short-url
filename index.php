@@ -160,8 +160,7 @@ if ($key !== "" && !file_exists("shortlinks/{$key}.json")) {
 }
 
 if ($key === "") {
-    readfile("404.html");
-    exit;
+    echo json_encode(['error' => '空页面。'], JSON_UNESCAPED_UNICODE);        exit;
 }
 
 $link = json_decode(file_get_contents("shortlinks/{$key}.json"), true);
