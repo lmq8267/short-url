@@ -193,14 +193,6 @@
     // Hide the result section when the button is clicked
     document.getElementById("result").style.display = "none";
 
-    // Regular expression to check for Chinese characters
-    var chineseRegex = /[\u4E00-\u9FA5]/;
-
-    if (shortCode !== "" && chineseRegex.test(shortCode)) {
-        alert("后缀不能包含中文，请修改后重试！");
-        return;
-    }
-
     if (userInput === "") {
         alert("请输入内容！");
         return;
