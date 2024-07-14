@@ -138,12 +138,35 @@ if (strpos($path, API_PATH) === 0) {
     if (empty($body[URL_NAME])) {
         $body[URL_NAME] = generateRandomString();
     }
+    // 获取过期时间
+    $sql = "SELECT expires_at, burn_after_reading FROM shortlinks WHERE short_code = '{$body[URL_NAME]}'";
+    $result = $conn->query($sql);
+    $link = $result->fetch_assoc();
 
+    // 判断链接是否已过期
+    if ($link['expires_at']) {
+        $expiresAt = new DateTime($link['expires_at'], new DateTimeZone('Asia/Shanghai'));
+        $now = new DateTime("now", new DateTimeZone('Asia/Shanghai'));
+        if ($expiresAt && $now >= $expiresAt) {
+           $sql = "DELETE FROM shortlinks WHERE short_code = '{$body[URL_NAME]}'";
+           $conn->query($sql);
+
+           // 更新total_rules
+           $sql = "SELECT COUNT(*) as totalRules FROM shortlinks";
+           $result = $conn->query($sql);
+           $totalRules = $result->fetch_assoc()['totalRules'];
+
+           $sql = "UPDATE short_rules SET total_rules = {$totalRules} WHERE id = 1";
+           $conn->query($sql);
+           
+        }
+    }
     $sql = "SELECT * FROM shortlinks WHERE short_code = '{$body[URL_NAME]}'";
     $result = $conn->query($sql);
     $existingData = $result->fetch_assoc();
     $isNewRule = !$existingData;
-
+    
+    
     if ($existingData && $existingData['password'] && $existingData['password'] !== $body['password']) {
         echo json_encode(['error' => '密码错误！该后缀已经被使用，请使用正确的密码修改或使用其他后缀。'], JSON_UNESCAPED_UNICODE);
         exit;
