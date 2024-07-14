@@ -141,9 +141,10 @@ if (strpos($path, API_PATH) === 0) {
     // 获取过期时间
     $sql = "SELECT expires_at, burn_after_reading FROM shortlinks WHERE short_code = '{$body[URL_NAME]}'";
     $result = $conn->query($sql);
-    $link = $result->fetch_assoc();
 
     // 判断链接是否已过期
+    if ($result && $result->num_rows > 0) {
+    $link = $result->fetch_assoc();
     if ($link['expires_at']) {
         $expiresAt = new DateTime($link['expires_at'], new DateTimeZone('Asia/Shanghai'));
         $now = new DateTime("now", new DateTimeZone('Asia/Shanghai'));
@@ -160,6 +161,7 @@ if (strpos($path, API_PATH) === 0) {
            $conn->query($sql);
            
         }
+    }
     }
     $sql = "SELECT * FROM shortlinks WHERE short_code = '{$body[URL_NAME]}'";
     $result = $conn->query($sql);
