@@ -308,8 +308,53 @@ if ($link) {
         echo $link['value'];
         exit;
     } else {
-        header("Content-Type: text/plain; charset=utf-8");
-        echo $link['value'];
+        header("Content-Type: text/html; charset=utf-8");
+        echo "
+            <!DOCTYPE html>
+            <html lang='zh-CN'>
+            <head>
+                <meta charset='UTF-8'>
+                <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+                <style>
+                    body, html {
+                        margin: 0;
+                        padding: 0;
+                        height: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        overflow: hidden;
+                    }
+                    #content {
+                        font-size: 5vw;
+                        font-weight: 900;
+                        text-align: center;
+                        max-height: 100vh;
+                        overflow-y: auto;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        word-break: break-word;
+                    }
+                </style>
+                <script>
+                    function adjustFontSize() {
+                        var content = document.getElementById('content');
+                        var fontSize = 5;
+                        while (content.scrollHeight > window.innerHeight && fontSize > 1) {
+                            fontSize -= 0.5;
+                            content.style.fontSize = fontSize + 'vw';
+                        }
+                    }
+
+                    window.onload = adjustFontSize;
+                    window.onresize = adjustFontSize;
+                </script>
+            </head>
+            <body>
+                <div id='content'>{$link['value']}</div>
+            </body>
+            </html>";
         exit;
     }
 }
