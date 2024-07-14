@@ -210,6 +210,7 @@ $key = urldecode($key);
 if ($key !== "") {
     $sql = "SELECT * FROM shortlinks WHERE short_code = '{$key}'";
     $result = $conn->query($sql);
+
     if ($result->num_rows === 0) {
         header("Location: " . ADMIN_PATH, true, 302);
         exit;
@@ -224,12 +225,31 @@ if ($link) {
     $expiresAt = isset($link['expires_at']) ? new DateTime($link['expires_at'], new DateTimeZone('Asia/Shanghai')) : null;
     $now = new DateTime("now", new DateTimeZone('Asia/Shanghai'));
     if ($expiresAt && $now >= $expiresAt) {
+        $sql = "DELETE FROM shortlinks WHERE short_code = '{$key}'";
+        $conn->query($sql);
+
+        // 更新total_rules
+        $sql = "SELECT COUNT(*) as totalRules FROM shortlinks";
+        $result = $conn->query($sql);
+        $totalRules = $result->fetch_assoc()['totalRules'];
+
+        $sql = "UPDATE short_rules SET total_rules = {$totalRules} WHERE id = 1";
+        $conn->query($sql);
+
         echo "链接已过期";
         exit;
     }
 
     if ($link['burn_after_reading'] == true) {
         $sql = "DELETE FROM shortlinks WHERE short_code = '{$key}'";
+        $conn->query($sql);
+
+        // 更新total_rules
+        $sql = "SELECT COUNT(*) as totalRules FROM shortlinks";
+        $result = $conn->query($sql);
+        $totalRules = $result->fetch_assoc()['totalRules'];
+
+        $sql = "UPDATE short_rules SET total_rules = {$totalRules} WHERE id = 1";
         $conn->query($sql);
     }
 
