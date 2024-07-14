@@ -1,6 +1,6 @@
 <?php
 // index.php
-define('ADMIN_PATH', '/');
+define('ADMIN_PATH', '/short');
 define('API_PATH', '/api');
 define('URL_KEY', 'longUrl');
 define('URL_NAME', 'shortCode');
