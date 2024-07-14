@@ -190,8 +190,9 @@ if (strpos($path, API_PATH) === 0) {
     ];
 
     if ($isNewRule) {
+        $value = mysqli_real_escape_string($conn, $linkData['value']);
         $sql = "INSERT INTO shortlinks (short_code, last_update, client_ip, type, value, password, expires_at, burn_after_reading) 
-                VALUES ('{$body[URL_NAME]}', '{$linkData['lastUpdate']}', '{$linkData['clientIp']}', '{$linkData['type']}', '{$linkData['value']}', '{$linkData['password']}', " . ($linkData['expiresAt'] ? "'{$linkData['expiresAt']}'" : "NULL") . ", " . ($linkData['burn_after_reading'] ? "TRUE" : "FALSE") . ")";
+                VALUES ('{$body[URL_NAME]}', '{$linkData['lastUpdate']}', '{$linkData['clientIp']}', '{$linkData['type']}', '{$value}', '{$linkData['password']}', " . ($linkData['expiresAt'] ? "'{$linkData['expiresAt']}'" : "NULL") . ", " . ($linkData['burn_after_reading'] ? "TRUE" : "FALSE") . ")";
         $conn->query($sql);
 
         $sql = "SELECT COUNT(*) as totalRules FROM shortlinks";
