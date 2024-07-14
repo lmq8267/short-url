@@ -1,9 +1,14 @@
 RewriteEngine On
 
+# 如果请求的是根目录，并且不存在index.html，则重写到index.php
+RewriteCond %{REQUEST_URI} ^/?$
+RewriteCond %{DOCUMENT_ROOT}/index.html !-f
+RewriteRule ^/?$ index.php [QSA,L]
+
+# 如果请求根目录且存在index.html，则重写到index.html ,因为默认域名是打开这个页面
+RewriteRule ^/?$ index.html [L]
+
 # 如果请求的文件不存在且不是目录，则重写到index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]
-
-# 请求根目录时重写到index.html
-RewriteRule ^/?$ index.html [L]
