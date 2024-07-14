@@ -44,7 +44,7 @@ function getDbConnection() {
             last_rule_update DATE,
             last_visits_update DATE
         );
-        
+
         INSERT INTO short_rules (id) SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM short_rules);
     ";
 
@@ -112,7 +112,7 @@ if ($path == ADMIN_PATH) {
             $shortRulesData['today_visits'] = '0';
         }
         if (!isset($shortRulesData['last_rule_update'])) {
-            $shortRulesData['last_rule_update'] = '2024';
+            $shortRulesData['last_rule_update'] = '2024-01-01';
         }
     }
 
@@ -175,6 +175,9 @@ if (strpos($path, API_PATH) === 0) {
         $result = $conn->query($sql);
         $totalRules = $result->fetch_assoc()['totalRules'];
 
+        $sql = "SELECT today_new_rules, last_rule_update FROM short_rules WHERE id = 1";
+        $result = $conn->query($sql);
+        $shortRulesData = $result->fetch_assoc();
         $todayNewRules = (int)$shortRulesData['today_new_rules'];
         $lastRuleUpdate = $shortRulesData['last_rule_update'];
         $today = (new DateTime("now", new DateTimeZone('Asia/Shanghai')))->format('Y-m-d');
@@ -207,13 +210,17 @@ $key = urldecode($key);
 if ($key !== "") {
     $sql = "SELECT * FROM shortlinks WHERE short_code = '{$key}'";
     $result = $conn->query($sql);
-    $link = $result->fetch_assoc();
-
-    if (!$link) {
+    if ($result->num_rows === 0) {
         header("Location: " . ADMIN_PATH, true, 302);
         exit;
     }
+} else {
+    echo json_encode(['error' => '空页面。'], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
+$link = $result->fetch_assoc();
+if ($link) {
     $expiresAt = isset($link['expires_at']) ? new DateTime($link['expires_at'], new DateTimeZone('Asia/Shanghai')) : null;
     $now = new DateTime("now", new DateTimeZone('Asia/Shanghai'));
     if ($expiresAt && $now >= $expiresAt) {
