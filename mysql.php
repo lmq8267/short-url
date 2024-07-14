@@ -325,23 +325,31 @@ if ($link) {
                         justify-content: center;
                         overflow: hidden;
                     }
+                    #container {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+                        width: 100%;
+                        overflow: hidden;
+                    }
                     #content {
                         font-size: 5vw;
                         font-weight: 900;
                         text-align: center;
-                        max-height: 100vh;
-                        overflow-y: auto;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
+                        overflow: auto;
+                        max-height: 100%;
+                        max-width: 100%;
                         word-break: break-word;
                     }
                 </style>
                 <script>
                     function adjustFontSize() {
                         var content = document.getElementById('content');
+                        var container = document.getElementById('container');
                         var fontSize = 5;
-                        while (content.scrollHeight > window.innerHeight && fontSize > 1) {
+                        content.style.fontSize = fontSize + 'vw';
+                        while ((content.scrollHeight > container.clientHeight || content.scrollWidth > container.clientWidth) && fontSize > 1) {
                             fontSize -= 0.5;
                             content.style.fontSize = fontSize + 'vw';
                         }
@@ -352,7 +360,9 @@ if ($link) {
                 </script>
             </head>
             <body>
-                <div id='content'>{$link['value']}</div>
+                <div id='container'>
+                    <div id='content'>{$link['value']}</div>
+                </div>
             </body>
             </html>";
         exit;
