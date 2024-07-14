@@ -163,12 +163,12 @@ if (strpos($path, API_PATH) === 0) {
         'value' => $body[URL_KEY],
         'password' => $body['password'],
         'expiresAt' => $expiresAt,
-        'burn_after_reading' => $body['burn_after_reading']
+        'burn_after_reading' => filter_var($body['burn_after_reading'], FILTER_VALIDATE_BOOLEAN)
     ];
 
     if ($isNewRule) {
         $sql = "INSERT INTO shortlinks (short_code, last_update, client_ip, type, value, password, expires_at, burn_after_reading) 
-                VALUES ('{$body[URL_NAME]}', '{$linkData['lastUpdate']}', '{$linkData['clientIp']}', '{$linkData['type']}', '{$linkData['value']}', '{$linkData['password']}', '{$linkData['expiresAt']}', '{$linkData['burn_after_reading']}')";
+                VALUES ('{$body[URL_NAME]}', '{$linkData['lastUpdate']}', '{$linkData['clientIp']}', '{$linkData['type']}', '{$linkData['value']}', '{$linkData['password']}', " . ($linkData['expiresAt'] ? "'{$linkData['expiresAt']}'" : "NULL") . ", " . ($linkData['burn_after_reading'] ? "TRUE" : "FALSE") . ")";
         $conn->query($sql);
 
         $sql = "SELECT COUNT(*) as totalRules FROM shortlinks";
@@ -191,7 +191,7 @@ if (strpos($path, API_PATH) === 0) {
         $sql = "UPDATE short_rules SET total_rules = {$totalRules}, today_new_rules = {$todayNewRules}, last_rule_update = '{$today}' WHERE id = 1";
         $conn->query($sql);
     } else {
-        $sql = "UPDATE shortlinks SET last_update = '{$linkData['lastUpdate']}', client_ip = '{$linkData['clientIp']}', type = '{$linkData['type']}', value = '{$linkData['value']}', password = '{$linkData['password']}', expires_at = '{$linkData['expiresAt']}', burn_after_reading = '{$linkData['burn_after_reading']}' WHERE short_code = '{$body[URL_NAME]}'";
+        $sql = "UPDATE shortlinks SET last_update = '{$linkData['lastUpdate']}', client_ip = '{$linkData['clientIp']}', type = '{$linkData['type']}', value = '{$linkData['value']}', password = '{$linkData['password']}', expires_at = " . ($linkData['expiresAt'] ? "'{$linkData['expiresAt']}'" : "NULL") . ", burn_after_reading = " . ($linkData['burn_after_reading'] ? "TRUE" : "FALSE") . " WHERE short_code = '{$body[URL_NAME]}'";
         $conn->query($sql);
     }
 
@@ -240,7 +240,7 @@ if ($link) {
         exit;
     }
 
-    if ($link['burn_after_reading'] == true) {
+    if ($link['burn_after_reading'] == 1) {
         $sql = "DELETE FROM shortlinks WHERE short_code = '{$key}'";
         $conn->query($sql);
 
