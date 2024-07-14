@@ -154,6 +154,7 @@ file_put_contents("shortlinks/{$body[URL_NAME]}.json", $jsonString);
 }
 
 $key = ltrim($path, '/');
+$key = urldecode($key);
 if ($key !== "" && !file_exists("shortlinks/{$key}.json")) {
     header("Location: " . ADMIN_PATH, true, 302);
     exit;
