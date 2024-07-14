@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
@@ -9,118 +9,155 @@
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔗</text></svg>">
     <title>简短分享 - 长网址缩短，文本分享，Html单页分享</title>
-</head>
-<style>
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-    }
-    .btn-secondary,
-    .btn-secondary:hover,
-    .btn-secondary:focus {
-        color: #333;
-        text-shadow: none;
-    }
-    .input-group-text {
-        background-color: orange;
-        border-color: orange;
-    }
-    .form-control {
-        border-color: orange;
-    }
-    body {
-        text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
-    }
-    .cover-container {
-        max-width: 42em;
-    }
-    .navbar-brand svg {
-        width: 30px;
-        height: 30px;
-    }
-    @media (max-width: 576px) {
-        #input-container .form-control,
-        #input-container .input-group-text {
-            display: block;
-            width: 100%;
-            margin-bottom: 1rem;
-            border-radius: 5px;
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
         }
-    }
-    .footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 60px;
-    }
-    .footer .container {
-        width: 100%;
-        height: 100%;
-        padding: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .black-toast .toast {
-        background-color: black;
-    }
-    .text-muted {
-        font-size: 14px;
-        color: #555;
-        margin-right: 20px;
-    }
-    .form-check {
-        margin-top: 10px;
-        margin-bottom: 10px;
-    }
-    .input-group-text {
-        font-size: 14px;
-    }
-    .stat-box {
-        display: inline-block;
-        width: 150px;
-        height: 100px;
-        border: 1px solid #eee;
-        border-radius: 10px;
-        margin: 10px;
-        text-align: center;
-        padding: 10px;
-        background-color: #f8f9fa;
-    }
-    .stat-box .stat-title {
-        font-size: 18px;
-        color: orange;
-        font-weight: bold;
-    }
-    .stat-box .stat-value {
-        font-size: 24px;
-        color: orange;
-        font-weight: bold;
-    }
-</style>
+        .btn-secondary,
+        .btn-secondary:hover,
+        .btn-secondary:focus {
+            color: #333;
+            text-shadow: none;
+        }
+        .input-group-text {
+            background-color: orange;
+            border-color: orange;
+        }
+        .form-control {
+            border-color: orange;
+        }
+        body {
+            text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
+        }
+        .cover-container {
+            max-width: 42em;
+        }
+        .navbar-brand svg {
+            width: 30px;
+            height: 30px;
+        }
+        @media (max-width: 576px) {
+            #input-container .form-control,
+            #input-container .input-group-text {
+                display: block;
+                width: 100%;
+                margin-bottom: 1rem;
+                border-radius: 5px;
+            }
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 60px;
+        }
+        .footer .container {
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .black-toast .toast {
+            background-color: black;
+        }
+        .text-muted {
+            font-size: 14px;
+            color: #555;
+            margin-right: 20px;
+        }
+        .form-check {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .input-group-text {
+            font-size: 14px;
+        }
+        .stat-box {
+            display: inline-block;
+            width: 150px;
+            height: 100px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            margin: 10px;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        .stat-box .stat-title {
+            font-size: 18px;
+            color: orange;
+            font-weight: bold;
+        }
+        .stat-box .stat-value {
+            font-size: 24px;
+            color: orange;
+            font-weight: bold;
+        }
+        /* Loading Overlay Styles */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 999;
+            text-align: center;
+        }
+        #loading-text {
+            color: orange;
+            font-size: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: scrollText 2s infinite;
+        }
+        @keyframes scrollText {
+            0% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) translateY(10px);
+            }
+            100% {
+                transform: translate(-50%, -50%) translateY(0);
+            }
+        }
+    </style>
+</head>
 <body class="d-flex h-100 text-center text-white bg-dark">
+<div id="loading-overlay">
+    <div id="loading-text">生成中...</div>
+</div>
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
     <header class="mb-auto">
         <div>
-         </div>
+        </div>
     </header>
     <main class="px-3">
-        <h1>简短分享</h1><br>
-                <br><div class="row justify-content-center">
+        <h1>简短分享</h1>
+        <br>
+        <br>
+        <div class="row justify-content-center">
             <div class="col-md-10">
                 <div id="input-container">
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="type">请选择功能</label>
                         <select class="form-control" id="type" name="type">
-                        <option value="link">缩短链接</option>
-                        <option value="text">显示文本</option>
-                        <option value="html">HTML网页</option>
+                            <option value="link">缩短链接</option>
+                            <option value="text">显示文本</option>
+                            <option value="html">HTML网页</option>
                         </select>
                     </div>
-                    
+
                     <div class="input-group mb-3">
                         <span class="input-group-text">请输入后缀</span>
                         <input type="text" class="form-control" id="shortCode" placeholder="可选，留空随机生成后缀">
@@ -130,7 +167,7 @@
                         <input type="text" class="form-control" id="password" placeholder="可选，密码保护后缀，防止他人修改">
                         <div class="text-danger" style="color: red; font-weight: bold;">&nbsp;&nbsp;&nbsp;&nbsp;⚠️请务必牢记后缀密码，忘记将无法修改，只能联系此站长删除！👆</div>
                     </div>
-                    
+
                     <div class="input-group mb-3">
                         <span class="input-group-text">有效期(分钟)</span>
                         <input type="number" class="form-control" id="expiration" placeholder="可选，单位：分钟（留空为永久有效，默认5分钟）" value="5">
@@ -138,13 +175,14 @@
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="burn_after_reading">阅后即焚</label>
                         <select class="form-select" id="burn_after_reading">
-                        <option value="false" selected>不启用</option>
-                       <option value="true">启用</option>
-                       </select>
+                            <option value="false" selected>不启用</option>
+                            <option value="true">启用</option>
+                        </select>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text">请输入内容</span>
-                        <textarea class="form-control" id="userInput" rows="5" placeholder="长网址或文本内容或HTML源代码"></textarea>                    </div>
+                        <textarea class="form-control" id="userInput" rows="5" placeholder="长网址或文本内容或HTML源代码"></textarea>
+                    </div>
                     <button id="submit" class="btn btn-primary btn-block mt-3">生成</button>
                 </div>
                 <div id="result" class="mt-3" style="display:none;">
@@ -168,7 +206,7 @@
                 <div class="stat-title">今日生成数</div>
                 <div class="stat-value">{{todayNewRules}}</div>
             </div>
-                         <br>
+            <br>
             <div class="stat-box">
                 <div class="stat-title">总转址数</div>
                 <div class="stat-value">{{totalvisits}}</div>
@@ -183,47 +221,58 @@
 </div>
 <script>
     document.getElementById("submit").addEventListener("click", function () {
-    var userInput = document.getElementById("userInput").value;
-    var shortCode = document.getElementById("shortCode").value;
-    var password = document.getElementById("password").value;
-    var expiration = document.getElementById("expiration").value;
-    var burnAfterReading = document.getElementById("burn_after_reading").value;
-    var type = document.getElementById("type").value;
+        var userInput = document.getElementById("userInput").value;
+        var shortCode = document.getElementById("shortCode").value;
+        var password = document.getElementById("password").value;
+        var expiration = document.getElementById("expiration").value;
+        var burnAfterReading = document.getElementById("burn_after_reading").value;
+        var type = document.getElementById("type").value;
 
-    // Hide the result section when the button is clicked
-    document.getElementById("result").style.display = "none";
+        // Show loading overlay
+        document.getElementById("loading-overlay").style.display = "block";
+        document.body.style.overflow = "hidden"; // Prevent scrolling
 
-    if (userInput === "") {
-        alert("请输入内容！");
-        return;
-    }
+        // Hide the result section when the button is clicked
+        document.getElementById("result").style.display = "none";
 
-    fetch("/api", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            longUrl: userInput,
-            shortCode: shortCode,
-            password: password,
-            expiration: expiration,
-            burn_after_reading: burnAfterReading,
-            type: type
-        })
-    }).then(response => response.json()).then(data => {
-        if (data.error) {
-            alert(data.error);
-        } else {
-            var shortUrl = data.shorturl;
-            document.getElementById("shortUrl").innerText = shortUrl;
-            document.getElementById("result").style.display = "block";
+        if (userInput === "") {
+            alert("请输入内容！");
+            document.getElementById("loading-overlay").style.display = "none";
+            document.body.style.overflow = "auto"; // Restore scrolling
+            return;
         }
-    }).catch(error => {
-        console.error("Error:", error);
-    });
-});
 
+        fetch("/api", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                longUrl: userInput,
+                shortCode: shortCode,
+                password: password,
+                expiration: expiration,
+                burn_after_reading: burnAfterReading,
+                type: type
+            })
+        }).then(response => response.json()).then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                var shortUrl = data.shorturl;
+                document.getElementById("shortUrl").innerText = shortUrl;
+                document.getElementById("result").style.display = "block";
+            }
+            // Hide loading overlay
+            document.getElementById("loading-overlay").style.display = "none";
+            document.body.style.overflow = "auto"; // Restore scrolling
+        }).catch(error => {
+            console.error("Error:", error);
+            // Hide loading overlay
+            document.getElementById("loading-overlay").style.display = "none";
+            document.body.style.overflow = "auto"; // Restore scrolling
+        });
+    });
 
     function copyShortUrl() {
         var shortUrl = document.getElementById("shortUrl").innerText;
