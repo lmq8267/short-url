@@ -88,6 +88,10 @@ $body = json_decode(file_get_contents('php://input'), true);
 if (empty($body[URL_NAME])) {
     $body[URL_NAME] = generateRandomString();
 }
+    if ($body[URL_NAME] === 'api') {
+    echo json_encode(['error' => '错误！该后缀为API调用用，请使用使用其他后缀。'], JSON_UNESCAPED_UNICODE);
+    exit;
+    }
     // 检查文件夹是否存在，如果不存在则创建
     $folderPath = "shortlinks";
     if (!file_exists($folderPath)) {
@@ -209,7 +213,7 @@ if ($link) {
     } else {
         header("Content-Type: text/html; charset=utf-8");
         echo "
-            <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang='zh-CN'>
 <head>
     <meta charset='UTF-8'>
@@ -223,34 +227,135 @@ if ($link) {
             align-items: center;
             justify-content: center;
             background-color: #f0f8ff; /* 淡蓝色背景 */
-        }
-        #container {
-            
-            width: 88%; /* 宽度占据80% */
-            height: 88%; /* 高度占据80% */
+       }
+
+       #container {
+            width: 92%; /* 宽度占据88% */
+            height: 92%; /* 高度占据88% */
             overflow: auto; /* 支持滚动 */
             padding: 5px; /* 内边距 */
             box-sizing: border-box; /* 边框包含在宽度和高度内 */
+            /* 绝对定位 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
+
         #content {
-            font-size: 30px; /* 固定大小的字体，可以根据需要调整像素大小 */
+            font-size: 15px; /* 固定大小的字体，可以根据需要调整像素大小 */
             font-weight: 900;
-            text-align: center;
+            text-align: left; /* 左对齐 */
             color: black; /* 黑色字体 */
-            word-break: break-word;
+            word-break: break-word; /* 自动换行 */
             white-space: pre-wrap; /* 保留原文换行 */
+            margin: 0; /* 去除外边距 */
+            padding: 0; /* 去除内边距 */
+        }
+        .floating-menu {
+            position: fixed;
+            top: 50%;
+            right: 10px;
+            z-index: 1000;
+            transform: translateY(-50%);
+        }
+        .floating-menu button {
+            display: block;
+            width: 30px;
+            height: 30px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-weight: bold; /* 加粗文本 */
+        }
+        #color-picker {
+            position: fixed;
+            top: 50%;
+            right: -200px;
+            width: 150px;
+            padding: 10px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            transition: right 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        #color-picker label {
+            margin: 5px 0;
+        }
+        #color-picker.show {
+            right: 0px;
         }
     </style>
 </head>
 <body>
     <div id='container'>
         <div id='content'>
-            {$link['value']}
+             {$link['value']}
         </div>
     </div>
+
+    <div class='floating-menu'>
+        <button onclick='toggleColorPicker()'>🎨</button>
+        <button onclick='adjustFontSize('+')'>+</button>
+        <button onclick='adjustFontSize('-')'>-</button>
+    </div>
+
+    <div id='color-picker'>
+        <label for='bg-color'>选择背景色:</label>
+        <input type='color' id='bg-color'>
+        <label for='font-color'>选择字体色:</label>
+        <input type='color' id='font-color'>
+    </div>
+
+    <script>
+        // Function to handle font size adjustment
+        function adjustFontSize(direction) {
+            var content = document.getElementById('content');
+            var currentFontSize = parseInt(window.getComputedStyle(content).fontSize);
+            var newFontSize = currentFontSize;
+
+            if (direction === '+') {
+                newFontSize += 2;
+            } else if (direction === '-') {
+                newFontSize -= 2;
+            }
+
+            content.style.fontSize = newFontSize + 'px';
+        }
+
+        // Function to toggle the color picker visibility
+        function toggleColorPicker() {
+            var colorPicker = document.getElementById('color-picker');
+            colorPicker.classList.toggle('show');
+        }
+
+        // Function to hide the color picker when clicking outside
+        document.addEventListener('click', function(event) {
+            var colorPicker = document.getElementById('color-picker');
+            var target = event.target;
+
+            if (!colorPicker.contains(target) && target !== document.querySelector('.floating-menu button:first-child')) {
+                colorPicker.classList.remove('show');
+            }
+        });
+
+        // Function to handle color changes
+        document.getElementById('bg-color').addEventListener('input', function() {
+            document.getElementById('container').style.backgroundColor = this.value;
+        });
+
+        document.getElementById('font-color').addEventListener('input', function() {
+            document.getElementById('content').style.color = this.value;
+        });
+    </script>
 </body>
 </html>";
-        exit;
+exit;
     }
 }
 
