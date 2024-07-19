@@ -89,7 +89,7 @@ if (empty($body[URL_NAME])) {
     $body[URL_NAME] = generateRandomString();
 }
     if ($body[URL_NAME] === 'api') {
-    echo json_encode(['error' => '错误！该后缀为API调用用，请使用使用其他后缀。'], JSON_UNESCAPED_UNICODE);
+    echo json_encode(['error' => '错误！该后缀为API调用，请使用其他后缀。'], JSON_UNESCAPED_UNICODE);
     exit;
     }
     // 检查文件夹是否存在，如果不存在则创建
