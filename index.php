@@ -85,7 +85,7 @@ if (strpos($path, API_PATH) === 0) {
 $body = json_decode(file_get_contents('php://input'), true);
 
 // 如果没有提供后缀，生成一个随机后缀
-if (empty($body[URL_NAME])) {
+if (!isset($body[URL_NAME]) || trim($body[URL_NAME]) === '') {
     $body[URL_NAME] = generateRandomString();
 }
     if ($body[URL_NAME] === 'api') {
