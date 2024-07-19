@@ -135,7 +135,7 @@ if (strpos($path, API_PATH) === 0) {
     $short_type = $body['type'] ?? 'link';
     $body[URL_NAME] = $body[URL_NAME] ?? substr(md5(uniqid()), 0, 6);
 
-    if (!isset($body[URL_NAME]) || trim($body[URL_NAME]) === '') {
+    if (empty($body[URL_NAME])) {
         $body[URL_NAME] = generateRandomString();
     }
     if ($body[URL_NAME] === 'api') {
